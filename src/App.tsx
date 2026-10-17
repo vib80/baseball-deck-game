@@ -200,32 +200,6 @@ export default function App() {
             )}
           </section>
 
-          <section className="supply">
-            <h2>Today&apos;s lineup</h2>
-            <div className="supply-grid">
-              {supplyIds.map((id) => {
-                const left = game.supply[id] ?? 0
-                const affordable =
-                  game.phase === 'signing' &&
-                  game.signings > 0 &&
-                  game.contact >= CARDS[id].cost &&
-                  left > 0 &&
-                  id !== 'strike-looking'
-                return (
-                  <CardView
-                    key={id}
-                    id={id}
-                    badge={`${left} left`}
-                    disabled={!affordable}
-                    onClick={
-                      affordable ? () => setGame(signCard(game, id)) : undefined
-                    }
-                  />
-                )
-              })}
-            </div>
-          </section>
-
           <section className="hand-zone">
             <div className="hand-head">
               <h2>{me.name}&apos;s lineup</h2>
@@ -242,6 +216,11 @@ export default function App() {
                 )}
               </div>
             </div>
+            <p className="hint">
+              {game.phase === 'at-bat'
+                ? 'Click a bright card in your lineup to play it.'
+                : 'Spend Contact in Today\'s lineup below, then End turn.'}
+            </p>
             <div className="row">
               {me.hand.map((id, i) => {
                 const playable = canPlay(game, id)
@@ -266,6 +245,32 @@ export default function App() {
                 </div>
               </>
             )}
+          </section>
+
+          <section className="supply">
+            <h2>Today&apos;s lineup</h2>
+            <div className="supply-grid">
+              {supplyIds.map((id) => {
+                const left = game.supply[id] ?? 0
+                const affordable =
+                  game.phase === 'signing' &&
+                  game.signings > 0 &&
+                  game.contact >= CARDS[id].cost &&
+                  left > 0 &&
+                  id !== 'strike-looking'
+                return (
+                  <CardView
+                    key={id}
+                    id={id}
+                    badge={`${left} left`}
+                    disabled={!affordable}
+                    onClick={
+                      affordable ? () => setGame(signCard(game, id)) : undefined
+                    }
+                  />
+                )
+              })}
+            </div>
           </section>
         </>
       )}
